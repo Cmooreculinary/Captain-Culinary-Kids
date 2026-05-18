@@ -20,6 +20,7 @@ Endpoints:
 This file is intentionally minimal: localStorage holds the source-of-truth
 on the front-end while the backend acts as a gentle cloud sync layer.
 """
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -36,11 +37,31 @@ from datetime import datetime, timezone
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
 
-app = FastAPI(title="Captain Culinary Kids API")
+def _require_env(name: str) -> str:
+    value = os.environ.get(name)
+    if not value:
+        raise RuntimeError(
+            f"Required environment variable {name!r} is not set. "
+            "Copy backend/.env.example to backend/.env and fill in real values."
+        )
+    return value
+
+
+mongo_url = _require_env('MONGO_URL')
+client = AsyncIOMotorClient(mongo_url)
+db = client[_require_env('DB_NAME')]
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    try:
+        yield
+    finally:
+        client.close()
+
+
+app = FastAPI(title="Captain Culinary Kids API", lifespan=lifespan)
 api_router = APIRouter(prefix="/api")
 
 # ---------------------------------------------------------------------------
@@ -335,8 +356,3 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()

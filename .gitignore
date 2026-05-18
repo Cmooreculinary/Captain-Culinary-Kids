@@ -94,7 +94,7 @@ credentials.json
 frontend/node_modules/.cache/default-development/2.pack
 frontend/node_modules/.cache/default-development/9.pack
 frontend/node_modules/.cache/default-development/13.pack
--e 
+-e
 # Environment and credential files
 .env
 .env.*
@@ -103,3 +103,7 @@ credentials.json
 *.pem
 *.key
 .credentials
+
+# Keep example env files (no secrets) so contributors know which vars to set.
+!.env.example
+!**/.env.example
