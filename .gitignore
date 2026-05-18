@@ -58,6 +58,10 @@ chainlit.md
 .ipynb_checkpoints/
 .ac
 
+# Motion library raw input (large contact sheets — kept out of git;
+# slicer outputs 90 individual PNGs to frontend/public/motions/)
+scripts/_motion_input/*.png
+
 # Deployment
 .vercel
 

@@ -95,3 +95,33 @@ Build a polished, mobile-first, demo-ready app called **Captain Culinary Kids** 
 1. Verify production deployment passes (no hardcoded URLs/keys)
 2. Add SpeechSynthesis hook keyed off `settings.soundOn`
 3. Begin Stripe checkout for one-time unlock (test key already in pod env)
+
+## Motion Library (added iteration 2)
+
+A 90-pose Captain Culinary Motion Library is now in the codebase as the visual
+vocabulary for Cap's speaking states. Tagged by intent (10 classes), tier fit
+(7-12 / 13-16 / 17-19), emotional register (5 classes), and rest-hold
+suitability.
+
+**Architecture:**
+- Pose layer: static PNGs, crossfaded by `<CaptainPose />`.
+- Eye layer: independent overlay via `<CaptainEyes />`, amplitude-driven in V2.
+- Selection: `gestureSelector.pickPose({ intent, tier, register })` —
+  callers pass intent manually in V1; V2 will plug a Gemma 4 E2B classifier
+  behind the same API.
+
+**Asset pipeline:** Three contact-sheet PNGs (5×6 grid each) live at
+`scripts/_motion_input/page{1,2,3}.png` (gitignored). Running
+`python scripts/slice_motion_contact_sheets.py` writes 90 individual pose
+PNGs (`cap-001.png` … `cap-090.png`) to `frontend/public/motions/`.
+
+**Review page:** `/motion-library` (not in bottom nav).
+
+**Coverage gap:** zero `safety_stop` poses currently. Required for safety
+moments per the PRD's non-negotiable safety standard. Flag for the next
+render batch.
+
+**V2 hooks (not yet wired):**
+- Gemini Flash Live streaming audio → amplitude prop on `<CaptainEyes />`.
+- On-device Gemma 4 E2B classifier → `pickPose({intent})` selection.
+- Real-time turn-taking and lesson-state-aware register selection.

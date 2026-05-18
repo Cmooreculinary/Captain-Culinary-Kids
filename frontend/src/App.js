@@ -17,6 +17,7 @@ import RestaurantBuilder from "@/pages/RestaurantBuilder";
 import ParentTeacherInfo from "@/pages/ParentTeacherInfo";
 import Settings from "@/pages/Settings";
 import LiveTestMode from "@/pages/LiveTestMode";
+import MotionLibraryGallery from "@/pages/MotionLibraryGallery";
 import BottomNavigation from "@/components/BottomNavigation";
 
 const HIDE_NAV_PATHS = ["/", "/age", "/parent", "/live-test"];
@@ -47,6 +48,7 @@ function ShellContent() {
         <Route path="/parent" element={<ParentTeacherInfo />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/live-test" element={<LiveTestMode />} />
+        <Route path="/motion-library" element={<MotionLibraryGallery />} />
       </Routes>
       {!hideNav && <BottomNavigation />}
     </div>
