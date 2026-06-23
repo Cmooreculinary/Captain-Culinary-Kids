@@ -17,9 +17,10 @@ import RestaurantBuilder from "@/pages/RestaurantBuilder";
 import ParentTeacherInfo from "@/pages/ParentTeacherInfo";
 import Settings from "@/pages/Settings";
 import LiveTestMode from "@/pages/LiveTestMode";
+import Purchase from "@/pages/Purchase";
 import BottomNavigation from "@/components/BottomNavigation";
 
-const HIDE_NAV_PATHS = ["/", "/age", "/parent", "/live-test"];
+const HIDE_NAV_PATHS = ["/", "/age", "/parent", "/live-test", "/purchase"];
 const FLUID_PATHS = ["/"];
 
 function ShellContent() {
@@ -47,6 +48,7 @@ function ShellContent() {
         <Route path="/parent" element={<ParentTeacherInfo />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/live-test" element={<LiveTestMode />} />
+        <Route path="/purchase" element={<Purchase />} />
       </Routes>
       {!hideNav && <BottomNavigation />}
     </div>

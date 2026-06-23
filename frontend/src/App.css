@@ -40,3 +40,54 @@
 .cck-shell-fluid.cck-no-nav {
     padding-bottom: 0;
 }
+
+/* =========================================================
+   Print styles — activated by window.print() on lesson plates
+   ========================================================= */
+.print-only {
+    display: none;
+}
+
+@media print {
+    /* Hide everything that isn't the teaching plate */
+    .no-print,
+    [data-no-print],
+    #emergent-badge,
+    .bottom-nav,
+    nav {
+        display: none !important;
+    }
+
+    /* Show print-only elements */
+    .print-only {
+        display: block !important;
+    }
+
+    /* Full-width shell, no padding */
+    .cck-shell {
+        padding-bottom: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .cck-page {
+        padding: 0.5rem !important;
+    }
+
+    /* Plate fills the page */
+    .print-plate-target {
+        width: 100% !important;
+        margin-top: 0.5rem !important;
+    }
+
+    /* Print header */
+    .print-header {
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #ccc;
+    }
+
+    @page {
+        margin: 0.5in;
+        size: letter portrait;
+    }
+}

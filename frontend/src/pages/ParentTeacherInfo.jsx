@@ -99,22 +99,35 @@ export default function ParentTeacherInfo() {
 
       <OrnamentDivider>One-time purchase</OrnamentDivider>
 
-      <div className="cck-card p-6 text-center" data-testid="purchase-block">
+      <div className="cck-card p-6 text-center" data-testid="purchase-block" style={{ borderColor: "var(--cck-teal)" }}>
         <BookOpen size={26} color="var(--cck-coral-deep)" className="mx-auto" />
         <h3 className="mt-2" style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", fontWeight: 700 }}>
           Buy once. Learn for life.
         </h3>
-        <p className="mt-2 text-sm" style={{ color: "var(--cck-navy-soft)" }}>
-          One app · three age paths · years of food skills. Core lessons are
-          included with purchase. No subscription required for the core learning path.
+        <div
+          className="mt-3"
+          style={{ fontFamily: "var(--font-display)", fontSize: "2.8rem", fontWeight: 800, color: "var(--cck-navy)", lineHeight: 1 }}
+        >
+          $14.99
+        </div>
+        <div className="mt-1 text-xs" style={{ color: "var(--cck-navy-soft)" }}>
+          one-time · no subscription · all three age paths included
+        </div>
+        <p className="mt-3 text-sm" style={{ color: "var(--cck-navy-soft)" }}>
+          7 lessons · 7 vintage teaching plates · family challenges · global
+          food missions · Food Truck &amp; Restaurant builders. First lesson is
+          always free.
         </p>
         <button
-          onClick={() => nav("/age")}
+          onClick={() => nav("/purchase")}
           className="cck-btn-primary mt-5"
           data-testid="parent-start-btn"
         >
-          Start a Path
+          Unlock All Lessons — $14.99
         </button>
+        <p className="mt-3 text-xs" style={{ color: "var(--cck-navy-soft)" }}>
+          Secure checkout via Stripe · Instant unlock
+        </p>
       </div>
     </div>
   );

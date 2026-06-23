@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend — pytest
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Start server in background
+        run: |
+          uvicorn server:app --host 0.0.0.0 --port 8001 &
+          # Wait for the server to be ready
+          for i in $(seq 1 15); do
+            curl -s http://localhost:8001/api/ && break || sleep 1
+          done
+
+      - name: Run tests
+        run: pytest tests/ -v
+        env:
+          REACT_APP_BACKEND_URL: http://localhost:8001
+
+  frontend:
+    name: Frontend — build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: yarn
+          cache-dependency-path: frontend/yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+        env:
+          REACT_APP_BACKEND_URL: https://cck-backend.onrender.com
+          # Suppress CRA non-zero exit on warnings
+          CI: false

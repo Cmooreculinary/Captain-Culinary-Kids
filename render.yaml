@@ -2,13 +2,14 @@
 # Captain Culinary Kids — Render Blueprint
 # ============================================================
 # Two services: FastAPI backend + React static-site frontend.
-# When you connect this repo to Render and click "Apply Blueprint",
-# Render reads this file and provisions both services.
+# Connect this repo to Render and click "Apply Blueprint" to
+# provision both services automatically.
 #
-# Env vars marked `sync: false` MUST be entered manually in the
-# Render dashboard (never committed to source control):
-#   - MONGO_URL          (MongoDB Atlas connection string)
-#   - EMERGENT_LLM_KEY   (your Emergent Universal Key)
+# Env vars marked `sync: false` MUST be entered manually in
+# the Render dashboard (never committed to source control):
+#   - STRIPE_SECRET_KEY       (Stripe secret key — sk_live_...)
+#   - STRIPE_WEBHOOK_SECRET   (Stripe webhook signing secret — whsec_...)
+#   - EMERGENT_LLM_KEY        (optional, for future Gemma 4 AI narration)
 # ============================================================
 
 services:
@@ -28,15 +29,24 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
-      - key: MONGO_URL
+
+      # CORS — restricts API access to the frontend origin
+      - key: CORS_ORIGINS
+        value: https://robot-chef-app.onrender.com
+
+      # Frontend URL — used to build Stripe redirect URLs
+      - key: FRONTEND_URL
+        value: https://robot-chef-app.onrender.com
+
+      # Stripe payment — set these manually in the Render dashboard
+      - key: STRIPE_SECRET_KEY
         sync: false
-      - key: DB_NAME
-        value: cck_production
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+
+      # Optional: Emergent LLM integration (future Gemma 4 / AI narration)
       - key: EMERGENT_LLM_KEY
         sync: false
-      - key: CORS_ORIGINS
-        # Update this once the frontend URL is known. Comma-separated.
-        value: https://robot-chef-app.onrender.com
 
   # ----------------------------------------------------------
   # Frontend — React static site
@@ -65,6 +75,9 @@ services:
       - path: /*
         name: X-Frame-Options
         value: SAMEORIGIN
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
       - path: /illustrations/*
         name: Cache-Control
         value: public, max-age=31536000, immutable

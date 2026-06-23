@@ -11,6 +11,8 @@ const DEFAULT_STATE = {
   completedChallenges: [],
   foodTrucks: [],
   restaurants: [],
+  unlocked: false,
+  stripeSessionId: null,
   settings: {
     soundOn: true,
     textSize: "regular", // "regular" | "large"
@@ -98,5 +100,15 @@ export const Storage = {
       write(s);
     }
     return s;
+  },
+  setUnlocked(stripeSessionId) {
+    const s = read();
+    s.unlocked = true;
+    s.stripeSessionId = stripeSessionId;
+    write(s);
+    return s;
+  },
+  isUnlocked() {
+    return read().unlocked === true;
   },
 };
